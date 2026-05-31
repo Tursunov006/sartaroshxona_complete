@@ -1,0 +1,44 @@
+{
+  "bookings": [],
+  "users": [],
+  "services": [
+    {
+      "id": "1",
+      "name": "Soch olish",
+      "price": 50000,
+      "duration": 30
+    },
+    {
+      "id": "2",
+      "name": "Soqol olish",
+      "price": 30000,
+      "duration": 20
+    },
+    {
+      "id": "3",
+      "name": "Yuzni tozalash",
+      "price": 40000,
+      "duration": 25
+    },
+    {
+      "id": "4",
+      "name": "To'liq paket",
+      "price": 100000,
+      "duration": 60
+    }
+  ],
+  "barbers": [
+    {
+      "id": "1",
+      "name": "Jasurbek"
+    },
+    {
+      "id": "2",
+      "name": "Sarvar"
+    },
+    {
+      "id": "3",
+      "name": "Alisher"
+    }
+  ]
+}
