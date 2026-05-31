@@ -14,7 +14,9 @@ const PublicShops = () => {
             if (mounted) setShops(res.data || []);
         }).catch(err => {
             console.error(err);
-        }).finally(() => mounted && setLoading(false));
+        }).finally(() => {
+            if (mounted) setLoading(false);
+        });
         return () => { mounted = false; };
     }, []);
 
@@ -31,16 +33,16 @@ const PublicShops = () => {
                     {shops.length === 0 && <p className="text-muted">Hozircha salonlar yo'q.</p>}
                     {shops.map(shop => (
                         <Col md={6} lg={4} key={shop.id || shop._id}>
-                            <Card className="feature-card card-modern h-100 p-4">
+                            <Card className="feature-card card-modern h-100 p-4 shop-card">
                                 <div className="d-flex justify-content-between align-items-start mb-3">
                                     <div>
                                         <h5 className="mb-1">{shop.name}</h5>
-                                        <div className="text-muted small">{shop.address || 'Manzil ma’lumotlari mavjud emas'}</div>
+                                        <div className="small-note">{shop.address || 'Manzil ma’lumotlari mavjud emas'}</div>
                                     </div>
-                                    <Badge bg="info">Salon</Badge>
+                                    <Badge bg="info" pill>Salon</Badge>
                                 </div>
-                                <div className="text-muted small">Telefon: {shop.phone || '—'}</div>
-                                {shop.instagram && <div className="text-muted small mt-2">Instagram: @{shop.instagram}</div>}
+                                <div className="small-note">Telefon: {shop.phone || '—'}</div>
+                                {shop.instagram && <div className="small-note mt-2">Instagram: @{shop.instagram}</div>}
                             </Card>
                         </Col>
                     ))}

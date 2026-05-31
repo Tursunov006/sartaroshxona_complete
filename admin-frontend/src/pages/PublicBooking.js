@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Form, Button, Alert, Spinner, Row, Col, ListGroup } from 'react-bootstrap';
+import { Card, Form, Button, Alert, Spinner, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -18,24 +18,38 @@ const PublicBooking = () => {
 
     useEffect(() => {
         let mounted = true;
-        Promise.all([
-            axios.get(`${API_URL}/services`),
-            axios.get(`${API_URL}/barbers`)
-        ]).then(([s, b]) => {
-            if (!mounted) return;
-            setServices(s.data || []);
-            setBarbers(b.data || []);
-        }).catch(() => { }).finally(() => mounted && setLoading(false));
+
+        const load = async () => {
+            try {
+                const [s, b] = await Promise.all([
+                    axios.get(`${API_URL}/services`),
+                    axios.get(`${API_URL}/barbers`)
+                ]);
+                if (!mounted) return;
+                setServices(s.data || []);
+                setBarbers(b.data || []);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                if (mounted) setLoading(false);
+            }
+        };
+
+        load();
         return () => { mounted = false; };
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); setMessage('');
+        setError('');
+        setMessage('');
+
         if (!form.customerName || !form.customerPhone || !form.serviceId || !form.barberId || !form.date || !form.time) {
             return setError('Iltimos barcha maydonlarni to‘ldiring');
         }
+
         setSaving(true);
+
         try {
             const res = await axios.post(`${API_URL}/bookings`, form);
             if (res.status === 201) {
@@ -55,89 +69,136 @@ const PublicBooking = () => {
         <div className="public-page">
             <div className="section-title mb-4">
                 <h2>Online bron</h2>
-                <span>Sizga eng yaqin sartaroshni hoziroq band qiling</span>
+                <span>Sizga mos sartaroshni yangi uslubda band qiling</span>
             </div>
-            <Row className="g-4">
-                <Col lg={7}>
+
+            <Row className="g-4 align-items-start">
+                <Col lg={6}>
                     <Card className="card-modern p-4">
-                        <Card.Body>
-                            {message && <Alert variant="success">{message}</Alert>}
-                            {error && <Alert variant="danger">{error}</Alert>}
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h3>Saqlangan bron</h3>
+                                <p className="small-note mb-0">Bir necha qadamda buyurtma yuboring.</p>
+                            </div>
+                            <span className="step-pill">01</span>
+                        </div>
 
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Mijoz ismi</Form.Label>
-                                    <Form.Control className="form-control-modern" value={form.customerName} onChange={e => setForm({ ...form, customerName: e.target.value })} />
-                                </Form.Group>
+                        {message && <Alert variant="success">{message}</Alert>}
+                        {error && <Alert variant="danger">{error}</Alert>}
 
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Telefon (+998...)</Form.Label>
-                                    <Form.Control className="form-control-modern" value={form.customerPhone} onChange={e => setForm({ ...form, customerPhone: e.target.value })} placeholder="+998901234567" />
-                                </Form.Group>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Mijoz ismi</Form.Label>
+                                <Form.Control
+                                    className="form-control-modern"
+                                    value={form.customerName}
+                                    onChange={e => setForm({ ...form, customerName: e.target.value })}
+                                />
+                            </Form.Group>
 
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Xizmat</Form.Label>
-                                    <Form.Select className="form-select-modern" value={form.serviceId} onChange={e => setForm({ ...form, serviceId: e.target.value })}>
-                                        <option value="">— Tanlang —</option>
-                                        {services.map(s => <option key={s.id || s._id} value={s.id || s._id}>{s.name} — {Number(s.price).toLocaleString('uz-UZ')} so'm</option>)}
-                                    </Form.Select>
-                                </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Telefon</Form.Label>
+                                <Form.Control
+                                    className="form-control-modern"
+                                    value={form.customerPhone}
+                                    onChange={e => setForm({ ...form, customerPhone: e.target.value })}
+                                    placeholder="+998901234567"
+                                />
+                            </Form.Group>
 
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Sartarosh</Form.Label>
-                                    <Form.Select className="form-select-modern" value={form.barberId} onChange={e => setForm({ ...form, barberId: e.target.value })}>
-                                        <option value="">— Tanlang —</option>
-                                        {barbers.map(b => <option key={b.id || b._id} value={b.id || b._id}>{b.name}</option>)}
-                                    </Form.Select>
-                                </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Xizmat</Form.Label>
+                                <Form.Select
+                                    className="form-select-modern"
+                                    value={form.serviceId}
+                                    onChange={e => setForm({ ...form, serviceId: e.target.value })}
+                                >
+                                    <option value="">— Tanlang —</option>
+                                    {services.map(s => (
+                                        <option key={s.id || s._id} value={s.id || s._id}>{s.name} — {Number(s.price).toLocaleString('uz-UZ')} so'm</option>
+                                    ))}
+                                </Form.Select>
+                            </Form.Group>
 
-                                <Row className="g-3">
-                                    <Col md={6}>
-                                        <Form.Group>
-                                            <Form.Label>Sana</Form.Label>
-                                            <Form.Control className="form-control-modern" type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md={6}>
-                                        <Form.Group>
-                                            <Form.Label>Vaqt</Form.Label>
-                                            <Form.Control className="form-control-modern" type="time" value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} />
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Sartarosh</Form.Label>
+                                <Form.Select
+                                    className="form-select-modern"
+                                    value={form.barberId}
+                                    onChange={e => setForm({ ...form, barberId: e.target.value })}
+                                >
+                                    <option value="">— Tanlang —</option>
+                                    {barbers.map(b => (
+                                        <option key={b.id || b._id} value={b.id || b._id}>{b.name}</option>
+                                    ))}
+                                </Form.Select>
+                            </Form.Group>
 
-                                <div className="mt-4">
-                                    <Button type="submit" className="btn-modern btn-primary w-100" disabled={saving}>
-                                        {saving ? 'Saqlanmoqda...' : 'Bron qilish'}
-                                    </Button>
-                                </div>
-                            </Form>
+                            <Row className="g-3">
+                                <Col md={6}>
+                                    <Form.Group>
+                                        <Form.Label>Sana</Form.Label>
+                                        <Form.Control
+                                            className="form-control-modern"
+                                            type="date"
+                                            value={form.date}
+                                            onChange={e => setForm({ ...form, date: e.target.value })}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={6}>
+                                    <Form.Group>
+                                        <Form.Label>Vaqt</Form.Label>
+                                        <Form.Control
+                                            className="form-control-modern"
+                                            type="time"
+                                            value={form.time}
+                                            onChange={e => setForm({ ...form, time: e.target.value })}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
 
-                            <div className="mt-4 text-muted small">Agar backend lokal bo'lsa, `http://localhost:5000/api` ishlatiladi.</div>
-                        </Card.Body>
+                            <div className="mt-4">
+                                <Button type="submit" className="btn-modern btn-light w-100" disabled={saving}>
+                                    {saving ? 'Saqlanmoqda...' : 'Bron qilish'}
+                                </Button>
+                            </div>
+                        </Form>
+
+                        <div className="mt-4 small-note">Ma'lumotlar `http://localhost:5000/api` orqali yuboriladi.</div>
                     </Card>
                 </Col>
-                <Col lg={5}>
+
+                <Col lg={6}>
                     <Card className="glass-card p-4 h-100">
-                        <h4 className="mb-3">Nima uchun biz?</h4>
-                        <p className="text-muted">Sartaroshlarni tanlash, xizmatlarni ko‘rish va bronni tasdiqlash endi bir joyda.</p>
-                        <ListGroup variant="flush" className="mt-4 gap-3">
-                            <ListGroup.Item className="border-0 bg-transparent p-0">
-                                <strong>⏱ Tez bron</strong>
-                                <div className="text-muted small">Bir necha daqiqada joy band qiling.</div>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 bg-transparent p-0">
-                                <strong>⭐ Haqiqiy sharhlar</strong>
-                                <div className="text-muted small">Foydalanuvchilarning baholari bilan tanlang.</div>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 bg-transparent p-0">
-                                <strong>📍 Yaqqol manzillar</strong>
-                                <div className="text-muted small">Har bir salon manzili aniq ko‘rsatiladi.</div>
-                            </ListGroup.Item>
-                        </ListGroup>
-                        <div className="mt-5 p-3 rounded-4 bg-light">
-                            <div className="fw-bold mb-2">Tanlangan imkoniyatlar</div>
-                            <div className="text-muted small">Online bron, sharhlar va xarita qidiruvini bitta platformada oling.</div>
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h4>Bron jarayoni</h4>
+                                <p className="small-note mb-0">Bosqichma-bosqich ko‘rsatma bilan tezkor natijaga erishasiz.</p>
+                            </div>
+                            <span className="step-pill">02</span>
+                        </div>
+
+                        <div className="list-panel">
+                            <div className="mb-3">
+                                <strong>1. Xizmat tanlang</strong>
+                                <p className="small-note mb-0">Mijozga mos xizmatni belgilang.</p>
+                            </div>
+                            <div className="mb-3">
+                                <strong>2. Sartaroshni tanlang</strong>
+                                <p className="small-note mb-0">Eng tajribali ustani tanlang.</p>
+                            </div>
+                            <div>
+                                <strong>3. Sana va vaqt</strong>
+                                <p className="small-note mb-0">O‘z vaqtingizga mos keluvchi joyni band qiling.</p>
+                            </div>
+                        </div>
+
+                        <div className="mt-5 bg-soft p-4 rounded-4">
+                            <h5 className="mb-3">Nega aynan biz?</h5>
+                            <p className="small-note mb-2">Ijodkorlik va qulaylik bir joyda.</p>
+                            <p className="small-note mb-0">Shaxsiy profil, sharhlar va bron tarixini bir joyda boshqaring.</p>
                         </div>
                     </Card>
                 </Col>

@@ -14,7 +14,9 @@ const PublicBarbers = () => {
       if (mounted) setBarbers(res.data || []);
     }).catch(err => {
       console.error(err);
-    }).finally(() => mounted && setLoading(false));
+    }).finally(() => {
+      if (mounted) setLoading(false);
+    });
     return () => { mounted = false; };
   }, []);
 
@@ -31,15 +33,15 @@ const PublicBarbers = () => {
           {barbers.length === 0 && <p className="text-muted">Hozircha sartaroshlar mavjud emas.</p>}
           {barbers.map(barber => (
             <Col md={6} lg={4} key={barber.id || barber._id}>
-              <Card className="feature-card card-modern h-100 p-4">
+              <Card className="feature-card card-modern h-100 p-4 barber-card">
                 <div className="d-flex justify-content-between align-items-start mb-3">
                   <div>
                     <h5 className="mb-1">{barber.name}</h5>
-                    <p className="text-muted small mb-0">Sartaroshning maxsus xizmatlari bilan bron qiling.</p>
+                    <div className="small-note">Sartaroshning maxsus xizmatlari bilan bron qiling.</div>
                   </div>
-                  <Badge bg="secondary">Top</Badge>
+                  <Badge bg="secondary" pill>Top</Badge>
                 </div>
-                <div className="text-muted small">Instagram: {barber.instagram ? `@${barber.instagram}` : 'Yo‘q'}</div>
+                <div className="small-note">Instagram: {barber.instagram ? `@${barber.instagram}` : 'Yo‘q'}</div>
               </Card>
             </Col>
           ))}

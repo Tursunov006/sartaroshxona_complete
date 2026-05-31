@@ -40,24 +40,24 @@ const PublicRegister = () => {
         <div className="auth-page d-flex align-items-center min-vh-100">
             <Container>
                 <Row className="justify-content-center gx-4">
-                    <Col lg={9}>
+                    <Col lg={10}>
                         <Row className="g-4 align-items-stretch">
-                            <Col md={5}>
+                            <Col lg={5}>
                                 <div className="auth-side h-100 d-flex flex-column justify-content-center">
                                     <h3 className="mb-3">Ro‘yxatdan o‘tish</h3>
-                                    <p className="mb-4">Hisob yarating va bronlaringizni boshqaring, sharhlar qoldiring hamda xizmatlar jadvalini kuzating.</p>
+                                    <p className="mb-4">Hisob yarating va bronlaringizni boshqaring, xizmatlarni tez olib boring.</p>
                                     <ul>
-                                        <li>Tez bron</li>
-                                        <li>Qo‘llab-quvvatlash</li>
-                                        <li>Shaxsiy tavsiyalar</li>
+                                        <li>Foydali imtiyozlar</li>
+                                        <li>Oson monitoring</li>
+                                        <li>Avvalgi buyurtmalar</li>
                                     </ul>
                                 </div>
                             </Col>
-                            <Col md={7}>
+                            <Col lg={7}>
                                 <Card className="auth-card h-100 p-4">
                                     <Card.Body>
                                         <h3 className="mb-3">Hisob yarating</h3>
-                                        <p className="text-muted">Hisob yarating va barcha sartarosh xizmatlaridan foydalaning.</p>
+                                        <p className="text-muted">Hisobni tez va ishonchli tarzda yaratib, xizmatlarni boshqaring.</p>
                                         {error && <Alert variant="danger">{error}</Alert>}
                                         <Form onSubmit={handleSubmit}>
                                             <Form.Group className="mb-3">
@@ -76,12 +76,12 @@ const PublicRegister = () => {
                                                 <Form.Label>Parol</Form.Label>
                                                 <Form.Control className="form-control-modern" type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" />
                                             </Form.Group>
-                                            <Button type="submit" className="btn-modern btn-primary w-100" disabled={loading}>
+                                            <Button type="submit" className="btn-modern btn-light" disabled={loading}>
                                                 {loading ? 'Yuborilmoqda...' : 'Ro‘yxatdan o‘tish'}
                                             </Button>
                                         </Form>
                                         <div className="mt-3 text-center text-muted">
-                                            Hisobingiz bormi? <Link to="/public/login">Kirish</Link>
+                                            Hisobingiz bor? <Link to="/public/login">Kirish</Link>
                                         </div>
                                     </Card.Body>
                                 </Card>
