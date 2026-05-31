@@ -14,13 +14,25 @@ import Payments from './pages/Payments';
 import CalendarPage from './pages/Calendar';
 import PublicBooking from './pages/PublicBooking';
 import MapSearch from './pages/MapSearch';
+import PublicHome from './pages/PublicHome';
+import PublicServices from './pages/PublicServices';
+import PublicBarbers from './pages/PublicBarbers';
+import PublicShops from './pages/PublicShops';
+import PublicReviews from './pages/PublicReviews';
+import PublicLogin from './pages/PublicLogin';
+import PublicRegister from './pages/PublicRegister';
 
 function App() {
     return (
         <BrowserRouter>
             <div className="container py-4">
+                <nav className="mb-3">
+                    <strong>Admin panel:</strong> {' '}
+                    <Link to="/">Dashboard</Link> | <Link to="/services">Xizmatlar</Link> | <Link to="/bookings">Bronlar</Link> | <Link to="/settings">Sozlamalar</Link> | <Link to="/users">Foydalanuvchilar</Link> | <Link to="/shops">Salonlar</Link> | <Link to="/barbers">Sartaroshlar</Link> | <Link to="/reviews">Sharhlar</Link> | <Link to="/payments">To‘lovlar</Link> | <Link to="/calendar">Kalendar</Link>
+                </nav>
                 <nav className="mb-4">
-                    <Link to="/">Dashboard</Link> | <Link to="/services">Services</Link> | <Link to="/bookings">Bookings</Link> | <Link to="/settings">Settings</Link> | <Link to="/users">Users</Link> | <Link to="/shops">Shops</Link> | <Link to="/barbers">Barbers</Link> | <Link to="/reviews">Reviews</Link> | <Link to="/payments">Payments</Link> | <Link to="/calendar">Calendar</Link> | <Link to="/public-booking">Public Booking</Link> | <Link to="/map">Map Search</Link>
+                    <strong>Mijoz sayti:</strong> {' '}
+                    <Link to="/public">Bosh sahifa</Link> | <Link to="/public/services">Xizmatlar</Link> | <Link to="/public/barbers">Sartaroshlar</Link> | <Link to="/public/shops">Salonlar</Link> | <Link to="/public/reviews">Sharhlar</Link> | <Link to="/public/booking">Bron</Link> | <Link to="/public/map">Xarita</Link> | <Link to="/public/login">Kirish</Link> | <Link to="/public/register">Ro‘yxatdan o‘tish</Link>
                 </nav>
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
@@ -35,6 +47,15 @@ function App() {
                     <Route path="/reviews" element={<Reviews />} />
                     <Route path="/payments" element={<Payments />} />
                     <Route path="/calendar" element={<CalendarPage />} />
+                    <Route path="/public" element={<PublicHome />} />
+                    <Route path="/public/services" element={<PublicServices />} />
+                    <Route path="/public/barbers" element={<PublicBarbers />} />
+                    <Route path="/public/shops" element={<PublicShops />} />
+                    <Route path="/public/reviews" element={<PublicReviews />} />
+                    <Route path="/public/booking" element={<PublicBooking />} />
+                    <Route path="/public/map" element={<MapSearch />} />
+                    <Route path="/public/login" element={<PublicLogin />} />
+                    <Route path="/public/register" element={<PublicRegister />} />
                     <Route path="/public-booking" element={<PublicBooking />} />
                     <Route path="/map" element={<MapSearch />} />
                 </Routes>

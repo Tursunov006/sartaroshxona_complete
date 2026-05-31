@@ -3,10 +3,9 @@
 ## Loyiha tuzilishi
 
 ```
-Sartaroshxona.uz/
+Sartaroshxona_complete/
 ├── backend/          Node.js server (port 5000)
-├── admin-frontend/   React admin panel (port 3001)
-├── frontend/         React mijozlar sayti (port 3000)
+├── admin-frontend/   React admin panel + mijoz veb sahifasi (port 3001)
 └── flutter/          Flutter mobile ilova
 ```
 
@@ -24,7 +23,7 @@ Test: http://localhost:5000/api/test
 
 ---
 
-## 2. ADMIN PANEL
+## 2. ADMIN PANEL va Mijoz sayti
 
 ```bash
 cd admin-frontend
@@ -32,22 +31,39 @@ npm install
 npm start
 ```
 
-URL: http://localhost:3001
-Email: admin@sartaroshxona.uz
-Parol: admin123
+Admin panel: http://localhost:3001
+Mijoz sayti: http://localhost:3001/public
+
+Admin email: admin@sartaroshxona.uz
+Admin parol: admin123
 
 ---
 
 ## 3. FLUTTER
 
 ```bash
+cd flutter
 flutter pub get
 flutter run -d chrome     # Web
-flutter run               # Android (USB bilan ulangan)
+flutter run               # Android emulator yoki qurilmada
 ```
 
-Real telefon uchun api_service.dart da:
-http://10.0.2.2:5000/api   ->  http://192.168.1.XXX:5000/api
+Android emulator uchun backend manzili:
+`http://10.0.2.2:5000/api`
+
+---
+
+## Public mijoz sahifasi
+
+- http://localhost:3001/public
+- http://localhost:3001/public/services
+- http://localhost:3001/public/barbers
+- http://localhost:3001/public/shops
+- http://localhost:3001/public/reviews
+- http://localhost:3001/public/booking
+- http://localhost:3001/public/map
+- http://localhost:3001/public/login
+- http://localhost:3001/public/register
 
 ---
 
@@ -56,18 +72,25 @@ http://10.0.2.2:5000/api   ->  http://192.168.1.XXX:5000/api
 GET    /api/test
 GET    /api/services
 GET    /api/barbers
+GET    /api/shops
+GET    /api/shops/nearby?lat=&lng=&radius=
+GET    /api/reviews
+POST   /api/reviews
 GET    /api/bookings
 POST   /api/bookings
 PATCH  /api/bookings/:id/status
 DELETE /api/bookings/:id
 POST   /api/auth/login
+POST   /api/auth/register
 GET    /api/auth/ai-logs
+GET    /api/settings
+GET    /api/users
 
 ---
 
 ## Tez-tez uchraydigan xatolar
 
-EADDRINUSE  -> Port 5000 band, serverni qayta ishga tushiring
-CORS xato   -> Backend index.js da cors() bor, server ishlasinmi tekshiring
-Android     -> IP manzilni o'zgartiring (emulator: 10.0.2.2)
-Flutter     -> flutter pub get bajaring
+- `EADDRINUSE`  -> Port band, serverni qayta ishga tushiring yoki portni o‘zgartiring.
+- CORS xato   -> Backendda `cors()` ishlatilgan; frontend va backend portlari mosligini tekshiring.
+- Android     -> Emulatorda `http://10.0.2.2:5000/api` ishlatish kerak.
+- Flutter     -> `flutter pub get` bajarilganligiga ishonch hosil qiling.
