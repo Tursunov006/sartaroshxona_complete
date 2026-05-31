@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
+import { Container, Form, Button, Card, Alert, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -32,31 +32,46 @@ const PublicLogin = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100" style={{ background: '#F8FAFF' }}>
-      <Container style={{ maxWidth: '420px' }}>
-        <Card className="border-0 shadow-lg" style={{ borderRadius: 20 }}>
-          <Card.Body className="p-4">
-            <h3 className="mb-3">Mijoz kirishi</h3>
-            <p className="text-muted">Elektron pochta va parol orqali kirish.</p>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="example@mail.com" />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Parol</Form.Label>
-                <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" />
-              </Form.Group>
-              <Button type="submit" className="w-100" disabled={loading}>
-                {loading ? 'Kutilmoqda...' : 'Kirish'}
-              </Button>
-            </Form>
-            <div className="mt-3 text-center text-muted">
-              Yangi foydalanuvchi? <Link to="/public/register">Ro‘yxatdan o‘tish</Link>
-            </div>
-          </Card.Body>
-        </Card>
+    <div className="auth-page d-flex align-items-center min-vh-100">
+      <Container>
+        <Row className="justify-content-center gx-4">
+          <Col lg={9}>
+            <Row className="g-4 align-items-stretch">
+              <Col md={5}>
+                <div className="auth-side h-100 d-flex flex-column justify-content-center">
+                  <h3 className="mb-3">Xush kelibsiz</h3>
+                  <p className="mb-4">Hisobingizga kirib, bronlaringizni boshqaring va tezkor xizmatlardan foydalaning.</p>
+                  <div className="rating-pill">⭐ 4.8 mijozlar bahosi</div>
+                </div>
+              </Col>
+              <Col md={7}>
+                <Card className="auth-card h-100 p-4">
+                  <Card.Body>
+                    <h3 className="mb-3">Mijoz kirishi</h3>
+                    <p className="text-muted">Elektron pochta va parol orqali kirish.</p>
+                    {error && <Alert variant="danger">{error}</Alert>}
+                    <Form onSubmit={handleSubmit}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control className="form-control-modern" type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="example@mail.com" />
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Parol</Form.Label>
+                        <Form.Control className="form-control-modern" type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" />
+                      </Form.Group>
+                      <Button type="submit" className="btn-modern btn-primary w-100" disabled={loading}>
+                        {loading ? 'Kutilmoqda...' : 'Kirish'}
+                      </Button>
+                    </Form>
+                    <div className="mt-3 text-center text-muted">
+                      Yangi foydalanuvchi? <Link to="/public/register">Ro‘yxatdan o‘tish</Link>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </Container>
     </div>
   );

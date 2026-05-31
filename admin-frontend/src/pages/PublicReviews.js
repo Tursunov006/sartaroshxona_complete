@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Row, Col, Form, Button, Spinner, Alert } from 'react-bootstrap';
+import { Card, Row, Col, Form, Button, Spinner, Alert, Badge } from 'react-bootstrap';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -77,64 +77,67 @@ const PublicReviews = () => {
     };
 
     return (
-        <div>
-            <h2 className="mb-4">Sharhlar</h2>
+        <div className="public-page">
+            <div className="section-title mb-4">
+                <h2>Sharhlar</h2>
+                <span>Foydalanuvchilarning haqiqiy fikrlari</span>
+            </div>
             <Row className="g-4">
-                <Col lg={6}>
-                    <Card className="shadow-sm">
+                <Col lg={5}>
+                    <Card className="card-modern p-4 h-100">
                         <Card.Body>
                             {error && <Alert variant="danger">{error}</Alert>}
                             {success && <Alert variant="success">{success}</Alert>}
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Ism</Form.Label>
-                                    <Form.Control value={form.userName} onChange={e => setForm({ ...form, userName: e.target.value })} placeholder="Ismingiz" />
+                                    <Form.Control className="form-control-modern" value={form.userName} onChange={e => setForm({ ...form, userName: e.target.value })} placeholder="Ismingiz" />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Baholash</Form.Label>
-                                    <Form.Select value={form.rating} onChange={e => setForm({ ...form, rating: Number(e.target.value) })}>
+                                    <Form.Select className="form-select-modern" value={form.rating} onChange={e => setForm({ ...form, rating: Number(e.target.value) })}>
                                         {[5, 4, 3, 2, 1].map(value => <option key={value} value={value}>{value} yulduz</option>)}
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Sharh</Form.Label>
-                                    <Form.Control as="textarea" rows={4} value={form.comment} onChange={e => setForm({ ...form, comment: e.target.value })} placeholder="O‘z fikringizni yozing" />
+                                    <Form.Control className="form-control-modern" as="textarea" rows={4} value={form.comment} onChange={e => setForm({ ...form, comment: e.target.value })} placeholder="O‘z fikringizni yozing" />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Salon</Form.Label>
-                                    <Form.Select value={form.shopId} onChange={e => setForm({ ...form, shopId: e.target.value, barberId: '' })}>
+                                    <Form.Select className="form-select-modern" value={form.shopId} onChange={e => setForm({ ...form, shopId: e.target.value, barberId: '' })}>
                                         <option value="">— Salon tanlang —</option>
                                         {shops.map(shop => <option key={shop.id || shop._id} value={shop.id || shop._id}>{shop.name}</option>)}
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>yoki Sartarosh</Form.Label>
-                                    <Form.Select value={form.barberId} onChange={e => setForm({ ...form, barberId: e.target.value, shopId: '' })}>
+                                    <Form.Select className="form-select-modern" value={form.barberId} onChange={e => setForm({ ...form, barberId: e.target.value, shopId: '' })}>
                                         <option value="">— Sartarosh tanlang —</option>
                                         {barbers.map(barber => <option key={barber.id || barber._id} value={barber.id || barber._id}>{barber.name}</option>)}
                                     </Form.Select>
                                 </Form.Group>
-                                <Button type="submit" disabled={saving} variant="primary">{saving ? 'Yuborilmoqda...' : 'Sharh yuborish'}</Button>
+                                <Button type="submit" className="btn-modern btn-primary w-100" disabled={saving}>{saving ? 'Yuborilmoqda...' : 'Sharh yuborish'}</Button>
                             </Form>
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col lg={6}>
+                <Col lg={7}>
                     {loading ? (
                         <div className="text-center py-5"><Spinner animation="border" /></div>
                     ) : (
                         <div className="d-grid gap-3">
                             {reviews.length === 0 && <p className="text-muted">Hozircha hech qanday sharh yo'q.</p>}
                             {reviews.map(review => (
-                                <Card key={review.id || review._id} className="shadow-sm">
-                                    <Card.Body>
-                                        <div className="d-flex justify-content-between align-items-center mb-2">
+                                <Card key={review.id || review._id} className="feature-card card-modern h-100 p-4">
+                                    <div className="d-flex justify-content-between align-items-center mb-3">
+                                        <div>
                                             <strong>{review.userName || 'Mehmon'}</strong>
-                                            <span className="text-warning">{review.rating}⭐</span>
+                                            <div className="text-muted small">{getTargetName(review)}</div>
                                         </div>
-                                        <p>{review.comment || 'Sharh mavjud emas'}</p>
-                                        <div className="text-muted small">{getTargetName(review)}</div>
-                                    </Card.Body>
+                                        <Badge bg="warning" text="dark">{review.rating}⭐</Badge>
+                                    </div>
+                                    <p className="mb-0">{review.comment || 'Sharh mavjud emas'}</p>
                                 </Card>
                             ))}
                         </div>

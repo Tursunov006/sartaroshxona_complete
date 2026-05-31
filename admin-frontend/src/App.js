@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/PublicTheme.css';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
