@@ -10,6 +10,9 @@ flutter/.flutter-plugins
 flutter/.flutter-plugins-dependencies
 flutter/pubspec.lock
 
+# React build outputs
+admin-frontend/build/
+
 # VS Code
 .vscode/
 
